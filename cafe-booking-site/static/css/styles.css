@@ -1,0 +1,470 @@
+:root {
+    --bg: #121212;
+    --surface: #1e1e1e;
+    --surface-glass: rgba(30, 30, 30, 0.85);
+    --primary: #7b68ee;
+    --primary-glow: rgba(123, 104, 238, 0.4);
+    --text-main: #ffffff;
+    --text-muted: #b3b3b3;
+    --danger: #ff4757;
+    --success: #2ed573;
+    --warning: #ffa502;
+    --nav-height: 70px;
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--text-main);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- HEADER (ИСПРАВЛЕНО ВЫРАВНИВАНИЕ) --- */
+header {
+    background: rgba(20, 20, 20, 0.95);
+    height: var(--nav-height);
+    display: flex; 
+    align-items: center; /* Центрируем по вертикали */
+    border-bottom: 1px solid #333; 
+    padding: 0 20px;
+    position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(10px);
+}
+
+nav { 
+    width: 100%; 
+    max-width: 1200px; 
+    margin: 0 auto; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; /* Центрируем лого и ссылки */
+}
+
+.logo { 
+    color: var(--primary); 
+    font-weight: bold; 
+    font-size: 1.4rem; 
+    text-decoration: none; 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+}
+
+.nav-links { 
+    display: flex; 
+    gap: 20px; 
+    align-items: center; /* ВАЖНО: Центрируем элементы внутри ссылок */
+    height: 100%;
+}
+
+.nav-links a { 
+    color: white; 
+    text-decoration: none; 
+    font-weight: 500; 
+    transition: 0.3s; 
+    display: flex; /* Чтобы текст внутри ссылки центрировался */
+    align-items: center;
+}
+.nav-links a:hover { color: var(--primary); }
+
+/* Кнопка выхода/входа */
+.btn-outline { 
+    border: 1px solid var(--primary); 
+    padding: 8px 20px; 
+    border-radius: 8px; 
+    color: var(--primary) !important; 
+    font-weight: 600;
+}
+.btn-outline:hover { background: var(--primary); color: white !important; }
+
+
+/* --- MAIN LAYOUT & GRID --- */
+main { 
+    max-width: 1200px; 
+    margin: 0 auto; 
+    padding: 40px 20px; 
+    width: 100%; 
+    box-sizing: border-box; 
+    flex: 1; 
+}
+
+.main-layout {
+    display: grid;
+    grid-template-columns: 1fr 280px; 
+    gap: 30px;
+    align-items: start;
+}
+
+.cafe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+.cafe-card {
+    background: var(--surface);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #333;
+    display: flex;
+    flex-direction: column; 
+    height: 100%;
+}
+
+.cafe-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    border-color: var(--primary);
+}
+
+.cafe-image {
+    width: 100%;
+    height: 200px;
+    background-color: #333;
+    background-size: cover;
+    background-position: center;
+    flex-shrink: 0;
+}
+
+.cafe-info {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; 
+}
+
+.cafe-info h3 { margin: 0 0 10px 0; color: var(--text-main); }
+.address { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px; }
+
+.btn {
+    display: inline-block;
+    background: var(--primary);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+    text-align: center;
+    line-height: 1.2;
+}
+.btn:hover { background: #6c5ce7; }
+
+.btn-full {
+    display: block;
+    width: 100%;
+    box-sizing: border-box; 
+    margin-top: auto; 
+}
+
+/* --- SIDEBAR --- */
+.filters-sidebar {
+    background: var(--surface);
+    padding: 25px;
+    border-radius: 16px;
+    position: sticky;
+    top: 90px;
+    border: 1px solid #333;
+}
+.filter-group { margin-bottom: 20px; }
+.filter-group label { display: block; margin-bottom: 8px; color: var(--text-muted); }
+select { width: 100%; padding: 10px; background: #121212; border: 1px solid #444; color: white; border-radius: 8px; }
+
+/* --- PROFILE DASHBOARD (НОВЫЙ ДИЗАЙН) --- */
+.profile-dashboard {
+    display: grid;
+    grid-template-columns: 300px 1fr; /* Левая колонка (инфо) и правая (история) */
+    gap: 40px;
+}
+
+/* Карточка пользователя */
+.user-card {
+    background: var(--surface);
+    padding: 30px;
+    border-radius: 20px;
+    border: 1px solid #333;
+    text-align: center;
+    position: sticky;
+    top: 100px;
+}
+
+.user-avatar {
+    width: 100px; height: 100px;
+    background: linear-gradient(135deg, var(--primary), #5f4dd0);
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.5rem; color: white; font-weight: bold;
+    box-shadow: 0 0 20px var(--primary-glow);
+}
+
+.user-name { font-size: 1.5rem; margin-bottom: 5px; color: white; }
+.user-email { color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem; }
+.user-stats { display: flex; justify-content: space-around; border-top: 1px solid #333; padding-top: 20px; }
+.stat-item h4 { margin: 0; font-size: 1.2rem; color: var(--primary); }
+.stat-item p { margin: 0; font-size: 0.8rem; color: #888; }
+
+/* История (Карточки-билеты) */
+.history-section h2 { margin-top: 0; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+
+.ticket-card {
+    background: var(--surface);
+    border-radius: 16px;
+    padding: 0; /* Паддинг внутри grid */
+    margin-bottom: 20px;
+    display: flex;
+    overflow: hidden;
+    border: 1px solid #333;
+    transition: transform 0.3s;
+    position: relative;
+}
+
+.ticket-card:hover { transform: translateY(-3px); border-color: var(--primary); }
+
+.ticket-left {
+    background: #252525;
+    padding: 20px;
+    width: 100px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    border-right: 2px dashed #444;
+    text-align: center;
+}
+.ticket-date-day { font-size: 1.8rem; font-weight: bold; color: var(--primary); display: block; }
+.ticket-date-month { font-size: 0.9rem; color: #aaa; text-transform: uppercase; }
+
+.ticket-right { padding: 20px; flex-grow: 1; display: flex; justify-content: space-between; align-items: center; }
+.ticket-info h3 { margin: 0 0 5px 0; font-size: 1.2rem; }
+.ticket-info p { margin: 0; color: #aaa; font-size: 0.9rem; }
+.ticket-meta { text-align: right; }
+.ticket-time { font-size: 1.2rem; font-weight: bold; display: block; margin-bottom: 5px; }
+.ticket-status { background: rgba(46, 213, 115, 0.15); color: var(--success); padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; }
+
+/* --- MAP & BOOKING --- */
+.restaurant-map-container {
+    background: #252525; border: 4px solid #444; border-radius: 16px; height: 500px;
+    position: relative; margin-bottom: 20px; overflow: hidden; box-shadow: inset 0 0 100px rgba(0,0,0,0.8);
+}
+.layout-type-3 { border-radius: 50%; border: 15px solid #333; width: 500px; height: 500px; margin: 20px auto; }
+.void-area { position: absolute; background: repeating-linear-gradient(45deg, #1a1a1a, #1a1a1a 10px, #222 10px, #222 20px); border-left: 2px solid #555; border-bottom: 2px solid #555; z-index: 20; display: flex; align-items: center; justify-content: center; color: #555; font-weight: bold; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+.central-bar { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80px; height: 80px; background: #333; border-radius: 50%; border: 4px solid #555; display: flex; align-items: center; justify-content: center; color: #777; z-index: 5; font-weight: bold; }
+.map-door { position: absolute; background: #333; border: 2px dashed #777; color: #aaa; width: 80px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; z-index: 5; text-transform: uppercase; letter-spacing: 1px; }
+.map-window { position: absolute; background: rgba(135, 206, 235, 0.1); border: 1px solid rgba(135, 206, 235, 0.3); z-index: 1; }
+
+.map-element { position: absolute; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; font-size: 0.8rem; cursor: pointer; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 5px 15px rgba(0,0,0,0.4); }
+.shape-rect { width: 60px; height: 40px; border-radius: 6px; }
+.shape-square { width: 50px; height: 50px; border-radius: 8px; }
+.shape-round { width: 50px; height: 50px; border-radius: 50%; }
+
+.status-free { background: var(--success); border: 2px solid rgba(255,255,255,0.2); }
+.status-booked { background: var(--warning); opacity: 0.8; cursor: not-allowed; border: 2px solid transparent; }
+.status-occupied { background: var(--danger); opacity: 0.6; cursor: not-allowed; border: 2px solid transparent; }
+.status-free:hover { transform: scale(1.2) !important; z-index: 100; box-shadow: 0 0 25px var(--success); border-color: white; }
+.table-spot.selected { background: white !important; color: black; transform: scale(1.3) !important; z-index: 200; box-shadow: 0 0 40px rgba(255,255,255,0.6); }
+
+.table-tooltip { display: none; position: absolute; bottom: -30px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.9); padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; white-space: nowrap; color: white; pointer-events: none; }
+.table-spot:hover .table-tooltip { display: block; }
+
+.map-legend { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; }
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: #aaa; }
+.dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+.dot.free { background: var(--success); box-shadow: 0 0 10px var(--success); }
+.dot.booked { background: var(--warning); }
+.dot.occupied { background: var(--danger); }
+
+/* --- BOOKING PANEL --- */
+.booking-panel {
+    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); 
+    width: 90%; max-width: 800px;
+    background: var(--surface-glass);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 20px 40px;
+    display: flex; justify-content: space-between; align-items: center;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    opacity: 0; pointer-events: none;
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    z-index: 999;
+}
+.booking-panel.active { opacity: 1; pointer-events: all; transform: translateX(-50%) translateY(0); }
+
+.panel-header { display: flex; flex-direction: column; gap: 5px; border-right: 1px solid rgba(255,255,255,0.1); padding-right: 30px; }
+.selected-table-info .value { color: var(--primary); font-weight: bold; font-size: 1.5rem; }
+.booking-form { display: flex; gap: 20px; align-items: center; flex-grow: 1; justify-content: flex-end; }
+.input-group { position: relative; display: flex; align-items: center; background: rgba(0,0,0,0.3); border-radius: 12px; padding: 5px 15px; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; }
+.input-group input { background: transparent; border: none; color: white; padding: 10px 0; font-family: inherit; font-size: 1rem; outline: none; cursor: pointer; }
+
+.btn-glow {
+    background: linear-gradient(135deg, var(--primary), #5f4dd0);
+    color: white; border: none; padding: 12px 30px; border-radius: 12px;
+    font-size: 1rem; font-weight: bold; cursor: pointer;
+    box-shadow: 0 10px 20px rgba(123, 104, 238, 0.3);
+    transition: 0.3s; display: flex; align-items: center; gap: 10px;
+}
+
+/* --- FOOTER (ИСПРАВЛЕНО ВЫРАВНИВАНИЕ ИКОНОК) --- */
+.site-footer {
+    background-color: #161616;
+    border-top: 1px solid #333;
+    padding: 60px 0 20px;
+    margin-top: 50px;
+}
+.footer-container {
+    max-width: 1200px; margin: 0 auto; padding: 0 20px;
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+    text-align: left; /* ВАЖНО: Все ровняем по левому краю */
+}
+.footer-col h3 { color: var(--primary); margin-top: 0; }
+.footer-col h4 { color: white; margin-bottom: 20px; }
+.footer-col p { color: #888; font-size: 0.9rem; line-height: 1.6; }
+.footer-col ul { list-style: none; padding: 0; }
+.footer-col ul li { margin-bottom: 10px; }
+.footer-col ul li a { color: #aaa; text-decoration: none; transition: 0.3s; }
+.footer-col ul li a:hover { color: var(--primary); padding-left: 5px; }
+
+/* ИСПРАВЛЕНИЕ ИКОНОК */
+.social-icons { 
+    margin-top: 20px; 
+    display: flex; 
+    gap: 15px; 
+    justify-content: flex-start; /* Прижимаем к левому краю, как и текст */
+}
+.social-icons a { 
+    color: #fff; background: #333; 
+    width: 40px; height: 40px; 
+    display: flex; align-items: center; justify-content: center; 
+    border-radius: 50%; text-decoration: none; transition: 0.3s; 
+}
+.social-icons a:hover { background: var(--primary); transform: translateY(-3px); }
+.footer-bottom { text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid #222; color: #666; font-size: 0.8rem; }
+/* ... (Оставь переменные и базовые стили из прошлого ответа) ... */
+/* Скопируй прошлый styles.css, и ДОБАВЬ В КОНЕЦ этот блок: */
+
+/* --- НОВЫЕ СТИЛИ ДЛЯ v2.0 --- */
+
+/* Карточка на главной */
+.card-overlay-top {
+    position: absolute; top: 10px; left: 10px; right: 10px;
+    display: flex; justify-content: space-between;
+}
+.rating-badge {
+    background: #2ed573; color: black; font-weight: bold; padding: 4px 8px;
+    border-radius: 6px; display: flex; align-items: center; gap: 4px; font-size: 0.9rem;
+}
+.favorite-btn {
+    background: rgba(0,0,0,0.5); border: none; color: white; width: 30px; height: 30px;
+    border-radius: 50%; cursor: pointer; transition: 0.2s;
+}
+.favorite-btn:hover { background: var(--danger); }
+
+.price-tag { font-weight: bold; color: var(--text-muted); letter-spacing: 2px; }
+.tags-container { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+.mini-tag { background: #333; font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; color: #ccc; }
+
+/* Фильтр персон (Chips) */
+.people-filter { display: flex; gap: 10px; align-items: center; margin-bottom: 20px; }
+.filter-chip {
+    background: #333; border: 1px solid #444; color: white; padding: 6px 14px;
+    border-radius: 20px; cursor: pointer; transition: 0.2s;
+}
+.filter-chip:hover { background: #444; }
+.filter-chip.active { background: var(--primary); border-color: var(--primary); }
+
+/* Секция отзывов */
+.reviews-section { margin-top: 40px; }
+.review-card { background: #222; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #333; }
+.review-header { display: flex; justify-content: space-between; margin-bottom: 5px; }
+.review-author { font-weight: bold; color: white; }
+.review-rating { color: #f1c40f; font-size: 0.8rem; }
+.review-text { font-size: 0.9rem; color: #ccc; margin-bottom: 5px; }
+.review-date { font-size: 0.8rem; color: #666; }
+
+/* Модальное окно Меню */
+.modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.8); backdrop-filter: blur(5px); }
+.modal-content { background-color: var(--surface); margin: 10% auto; padding: 30px; border: 1px solid #444; width: 80%; max-width: 600px; border-radius: 16px; position: relative; }
+.close-modal { position: absolute; top: 15px; right: 20px; color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer; }
+.close-modal:hover { color: white; }
+.menu-category { margin-bottom: 20px; }
+.menu-category h3 { color: var(--primary); border-bottom: 1px solid #333; padding-bottom: 5px; }
+.menu-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #333; }
+.menu-item .price { font-weight: bold; color: white; }
+/* --- СТИЛИ АВТОРИЗАЦИИ (LOGIN/REGISTER) --- */
+
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh; /* Чтобы было по центру экрана */
+}
+
+.auth-card {
+    background: var(--surface);
+    border: 1px solid #333;
+    padding: 40px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Декоративная подсветка сверху */
+.auth-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 5px;
+    background: linear-gradient(90deg, var(--primary), #5f4dd0);
+}
+
+.auth-icon {
+    font-size: 3rem;
+    color: var(--primary);
+    margin-bottom: 20px;
+    text-shadow: 0 0 20px var(--primary-glow);
+}
+
+.auth-header h2 { margin-bottom: 10px; color: white; }
+.auth-header p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 30px; }
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Переопределяем input-group для форм, чтобы они были побольше */
+.auth-form .input-group {
+    padding: 12px 15px;
+    background: #121212;
+    border: 1px solid #333;
+}
+
+.auth-form .input-group:focus-within {
+    border-color: var(--primary);
+    background: #1a1a1a;
+}
+
+.auth-footer {
+    margin-top: 25px;
+    font-size: 0.9rem;
+    color: #888;
+}
+
+.auth-footer a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}

@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="booking-header">
+        <div>
+            <h2>{{ current_cafe.name }}</h2>
+            <div style="display:flex; gap:15px; margin-top:5px; color:#aaa; font-size:0.9rem;">
+                <span><i class="fas fa-utensils"></i> {{ current_cafe.cuisine }}</span>
+                <span><i class="fas fa-ruble-sign"></i> Средний чек: ~{{ current_cafe.avg_check }}₽</span>
+            </div>
+        </div>
+        <div style="display:flex; gap:10px;">
+             <button class="btn-outline" onclick="openMenu()"><i class="fas fa-book-open"></i> Меню</button>
+             <form action="{{ url_for('booking') }}" method="GET" class="cafe-selector">
+                <select name="cafe" onchange="this.form.submit()">
+                    {% for c in all_cafes %}
+                    <option value="{{ c.id }}" {% if c.id == current_cafe.id %}selected{% endif %}>{{ c.name }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+    </div>
+
+    <!-- ФИЛЬТР ПЕРСОН (JS) -->
+    <div class="people-filter">
+        <span>Показать столы на:</span>
+        <button class="filter-chip active" onclick="filterTables('all', this)">Все</button>
+        <button class="filter-chip" onclick="filterTables(2, this)">2 чел.</button>
+        <button class="filter-chip" onclick="filterTables(4, this)">4 чел.</button>
+        <button class="filter-chip" onclick="filterTables(6, this)">6+ чел.</button>
+    </div>
+
+    <div class="booking-wrapper">
+        
+        <!-- КАРТА ЗАЛА -->
+        <div class="restaurant-map-container layout-type-{{ current_cafe.id }}" id="map-container">
+            
+            {% if current_cafe.id == 2 %}
+                <div class="void-area" style="top: 0; right: 0; width: 40%; height: 60%;"><i class="fas fa-fire-burner"></i> КУХНЯ</div>
+                <div class="map-door" style="bottom: 0; left: 20%;">Вход</div>
+            {% endif %}
+            {% if current_cafe.id == 3 %}
+                <div class="central-bar">BAR</div>
+                <div class="map-door" style="bottom: 5px; left: 50%; transform: translateX(-50%);">Вход</div>
+            {% endif %}
+            {% if current_cafe.id == 4 %}
+                 <div style="position: absolute; top: 10%; left: 40%; width: 20%; height: 80%; background: #222; border: 1px dashed #555; display: flex; align-items: center; justify-content: center; color: #555; font-size: 0.8rem; writing-mode: vertical-rl;">Конвейер</div>
+            {% endif %}
+            {% if current_cafe.id == 1 or current_cafe.id == 5 %}
+                <div class="map-window" style="top: 0; left: 10%; width: 80%; height: 5px;"></div>
+                <div class="map-door" style="bottom: 0; left: 45%;">ВХОД</div>
+            {% endif %}
+
+            {% for table in tables %}
+                {% set status = table_statuses[table.id] %}
+                <div class="map-element table-spot shape-{{ table.shape }} status-{{ status }}"
+                     style="left: {{ table.pos_x }}%; top: {{ table.pos_y }}%; transform: rotate({{ table.rotation }}deg);"
+                     data-id="{{ table.id }}"
+                     data-number="{{ table.number }}"
+                     data-seats="{{ table.seats }}"
+                     data-status="{{ status }}"
+                     onclick="selectTable(this)">
+                    <span style="transform: rotate(-{{ table.rotation }}deg);">{{ table.number }}</span>
+                    <div class="table-tooltip" style="transform: rotate(-{{ table.rotation }}deg) translateX(-50%);">{{ table.seats }} чел.</div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- ОТЗЫВЫ -->
+        <div class="reviews-section">
+            <h3>Отзывы посетителей</h3>
+            <div class="reviews-list">
+                {% for review in reviews %}
+                <div class="review-card">
+                    <div class="review-header">
+                        <span class="review-author">{{ review.user_name }}</span>
+                        <div class="review-rating">
+                            {% for i in range(review.rating) %}<i class="fas fa-star"></i>{% endfor %}
+                        </div>
+                    </div>
+                    <p class="review-text">{{ review.text }}</p>
+                    <span class="review-date">{{ review.date }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- АНИМИРОВАННАЯ ПАНЕЛЬ -->
+        <div class="booking-panel" id="booking-panel">
+            <div class="panel-header">
+                <div class="selected-table-info">
+                    <span class="label">Стол:</span>
+                    <span class="value" id="table-number-display">--</span>
+                </div>
+                <div class="selected-table-seats">
+                    <i class="fas fa-users"></i> <span id="table-seats-display">--</span> чел.
+                </div>
+            </div>
+
+            <form method="POST" action="{{ url_for('booking') }}" class="booking-form">
+                <input type="hidden" name="cafe_id" value="{{ current_cafe.id }}">
+                <input type="hidden" name="table_id" id="input-table-id" required>
+                <div class="input-group"><i class="fas fa-calendar-alt"></i><input type="date" name="date" value="{{ today }}" min="{{ today }}" required></div>
+                <div class="input-group"><i class="fas fa-clock"></i><input type="time" name="time" value="19:00" required></div>
+                <button type="submit" class="btn-glow" id="submit-btn">Забронировать</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- МОДАЛЬНОЕ ОКНО МЕНЮ -->
+<div id="menu-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeMenu()">&times;</span>
+        <h2>Меню {{ current_cafe.name }}</h2>
+        <div class="menu-items">
+            <div class="menu-category">
+                <h3>Закуски</h3>
+                <div class="menu-item"><span>Цезарь с курицей</span> <span class="price">450₽</span></div>
+                <div class="menu-item"><span>Тартар из говядины</span> <span class="price">650₽</span></div>
+            </div>
+            <div class="menu-category">
+                <h3>Горячее</h3>
+                <div class="menu-item"><span>Стейк Рибай</span> <span class="price">2100₽</span></div>
+                <div class="menu-item"><span>Паста Карбонара</span> <span class="price">550₽</span></div>
+            </div>
+            <div class="menu-category">
+                <h3>Напитки</h3>
+                <div class="menu-item"><span>Лимонад домашний</span> <span class="price">300₽</span></div>
+                <div class="menu-item"><span>Капучино</span> <span class="price">250₽</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// ЛОГИКА ФИЛЬТРА
+function filterTables(seats, btn) {
+    document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    
+    document.querySelectorAll('.table-spot').forEach(el => {
+        const tableSeats = parseInt(el.dataset.seats);
+        if (seats === 'all') {
+            el.style.opacity = '1';
+            el.style.pointerEvents = 'all';
+        } else {
+            if (seats === 6) {
+                 if (tableSeats >= 6) { el.style.opacity = '1'; el.style.pointerEvents = 'all'; }
+                 else { el.style.opacity = '0.2'; el.style.pointerEvents = 'none'; }
+            } else {
+                 if (tableSeats === seats) { el.style.opacity = '1'; el.style.pointerEvents = 'all'; }
+                 else { el.style.opacity = '0.2'; el.style.pointerEvents = 'none'; }
+            }
+        }
+    });
+}
+
+function selectTable(element) {
+    const status = element.dataset.status;
+    if (status === 'occupied' || status === 'booked') return;
+    document.querySelectorAll('.table-spot').forEach(el => el.classList.remove('selected'));
+    element.classList.add('selected');
+    document.getElementById('input-table-id').value = element.dataset.id;
+    document.getElementById('table-number-display').innerText = "№" + element.dataset.number;
+    document.getElementById('table-seats-display').innerText = element.dataset.seats;
+    document.getElementById('booking-panel').classList.add('active');
+}
+
+// МОДАЛКА
+function openMenu() { document.getElementById('menu-modal').style.display = 'block'; }
+function closeMenu() { document.getElementById('menu-modal').style.display = 'none'; }
+window.onclick = function(event) {
+    if (event.target == document.getElementById('menu-modal')) closeMenu();
+}
+</script>
+{% endblock %}

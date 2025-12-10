@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stoliki — Бронирование лучших мест</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <!-- Подключаем FontAwesome для иконок -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <header>
+        <nav>
+            <!-- НОВЫЙ ЛОГОТИП -->
+            <a href="{{ url_for('index') }}" class="logo">
+                <i class="fas fa-couch"></i> Stoliki
+            </a>
+
+            <div class="nav-links">
+                {% if session.get('user_id') %}
+                    <a href="{{ url_for('profile') }}">Профиль</a>
+                    <a href="{{ url_for('logout') }}" class="btn-outline">Выйти</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}">Вход</a>
+                    <a href="{{ url_for('register') }}" class="btn">Регистрация</a>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- ОБНОВЛЕННЫЙ ФУТЕР -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>Stoliki</h3>
+                <p>Современный сервис бронирования. Выбирайте лучшие места на интерактивной карте зала и отдыхайте с комфортом.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-telegram-plane"></i></a>
+                    <a href="#"><i class="fab fa-vk"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Навигация</h4>
+                <ul>
+                    <li><a href="{{ url_for('index') }}">Рестораны</a></li>
+                    <li><a href="{{ url_for('booking') }}">Карта залов</a></li>
+                    <li><a href="{{ url_for('profile') }}">Мои брони</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Контакты</h4>
+                <ul>
+                    <li><i class="fas fa-phone-alt"></i> 8 (800) 555-35-35</li>
+                    <li><i class="fas fa-envelope"></i> hello@stoliki.app</li>
+                    <li><i class="fas fa-map-marker-alt"></i> Москва, Сити, Башня Федерация</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Stoliki Inc. Все права защищены.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
