@@ -9,7 +9,7 @@
         <div class="cafe-grid">
             {% for cafe in cafes %}
             <div class="cafe-card">
-                <div class="cafe-image" style="background-image: url('{{ url_for('static', filename='images/' ~ cafe.id ~ '.jpg') }}');">
+                <div class="cafe-image" style="background-image: url('{{ url_for('static', filename='images/' ~ cafe.id ~ '.png') }}');">
                     <!-- Хедер карточки поверх фото -->
                     <div class="card-overlay-top">
                         <div class="rating-badge">
@@ -79,3 +79,4 @@
 
 </div>
 {% endblock %}
+
